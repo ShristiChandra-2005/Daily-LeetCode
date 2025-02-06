@@ -1,29 +1,46 @@
-Approch
-=========
-Check if strings are equal: If yes, return true.
-Check if lengths are different: If yes, return false.
-Find indices where characters differ.
-If there are exactly two differences, check if swapping the characters at those indices makes the strings equal.
-Return true if swap is valid, else return false.
+APPROCH
+Use a HashMap to store product frequencies:
+Iterate through all pairs (i, j), compute product = nums[i] * nums[j], and store its count.
+Count valid tuples:
+For each product appearing count times in the HashMap:
+Compute C(count,2) = (count * (count - 1)) / 2
+Multiply by 8 (to account for different permutations).
+Return the total count of valid tuples.
 
-Code::--
+Code:
+
+import java.util.HashMap;
+import java.util.Map;
+
 class Solution {
-    public boolean areAlmostEqual(String s1, String s2) {
-       if(s1.equals(s2)){
-        return true;
-       }
-       if(s1.length()!=s2.length()){
-        return false;
-       }
-       List <Integer> diff=new ArrayList();
-       for(int i=0;i<s1.length(); i++){
-        if(s1.charAt(i) != s2.charAt(i)){
-            diff.add(i);
+    public int tupleSameProduct(int[] nums) {
+        HashMap<Integer, Integer> productMap = new HashMap<>();
+        int n = nums.length;
+
+        // Count occurrences of each product
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                int res = nums[i] * nums[j];
+                productMap.put(res, productMap.getOrDefault(res, 0) + 1);
+            }
         }
-    }
-    if(diff.size() != 2){
-        return false;
-    }
-    return s1.charAt(diff.get(0)) == s2.charAt(diff.get(1)) && s1.charAt(diff.get(1))==s2.charAt(diff.get(0));
+
+        int ans = 0;
+
+        // Calculate the number of valid tuples
+        for (Map.Entry<Integer, Integer> entry : productMap.entrySet()) {
+            int count = entry.getValue();  // Corrected: Get the count, not the key
+
+            if (count >= 2) {
+                int comb = (count * (count - 1)) / 2;  // Compute combinations
+                ans += comb * 8;  // Each pair can form 8 permutations
+            }
+        }
+
+        return ans;
     }
 }
+
+
+
+
