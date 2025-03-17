@@ -1,0 +1,123 @@
+ Leetcode 2206: Divide Array Into Equal Pairs in Java
+
+Multiple Approchs ::-->
+
+1) Brute Force (Nested Loops) - O(N²)
+
+import java.util.Arrays;
+
+public class DivideArrayBruteForce {
+    public static boolean divideArray(int[] nums) {
+        int n = nums.length;
+        if (n % 2 != 0) return false; // Must have even length
+        
+        boolean[] used = new boolean[n]; // Track used elements
+        
+        for (int i = 0; i < n; i++) {
+            if (used[i]) continue;
+            boolean foundPair = false;
+            
+            for (int j = i + 1; j < n; j++) {
+                if (!used[j] && nums[i] == nums[j]) {
+                    used[j] = true;
+                    foundPair = true;
+                    break;
+                }
+            }
+            
+            if (!foundPair) return false;
+        }
+        return true;
+    }
+
+    public static void main(String[] args) {
+        int[] nums = {3, 2, 3, 2, 2, 2};
+        System.out.println(divideArray(nums)); // Output: true
+    }
+}
+
+
+2).Sorting + Pair Checking - O(N log N):
+
+import java.util.Arrays;
+
+public class DivideArraySorting {
+    public static boolean divideArray(int[] nums) {
+        Arrays.sort(nums);
+        
+        for (int i = 0; i < nums.length; i += 2) {
+            if (nums[i] != nums[i + 1]) return false;
+        }
+        
+        return true;
+    }
+
+    public static void main(String[] args) {
+        int[] nums = {3, 2, 3, 2, 2, 2};
+        System.out.println(divideArray(nums)); // Output: true
+    }
+}
+
+
+3).Frequency Count (HashMap) - O(N) :
+
+import java.util.HashMap;
+
+public class DivideArrayFrequencyCount {
+    public static boolean divideArray(int[] nums) {
+        HashMap<Integer, Integer> countMap = new HashMap<>();
+        
+        for (int num : nums) {
+            countMap.put(num, countMap.getOrDefault(num, 0) + 1);
+        }
+        
+        for (int freq : countMap.values()) {
+            if (freq % 2 != 0) return false;
+        }
+        
+        return true;
+    }
+
+    public static void main(String[] args) {
+        int[] nums = {3, 2, 3, 2, 2, 2};
+        System.out.println(divideArray(nums)); // Output: true
+    }
+}
+
+
+4).Set Parity Check (O(N)) :
+
+import java.util.HashSet;
+
+public class DivideArraySetParity {
+    public static boolean divideArray(int[] nums) {
+        HashSet<Integer> set = new HashSet<>();
+        
+        for (int num : nums) {
+            if (set.contains(num)) {
+                set.remove(num);
+            } else {
+                set.add(num);
+            }
+        }
+        
+        return set.isEmpty();
+    }
+
+    public static void main(String[] args) {
+        int[] nums = {3, 2, 3, 2, 2, 2};
+        System.out.println(divideArray(nums)); // Output: true
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
